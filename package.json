@@ -1,0 +1,33 @@
+{
+  "name": "proxy",
+  "version": "1.0.0",
+  "description": "",
+  "main": "main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "electron .",
+    "build": "cross-env BUILD_TARGET=mas node .electron-build/build.js",
+    "build:darwin": "cross-env BUILD_TARGET=darwin node .electron-build/build.js",
+    "build:linux": "cross-env BUILD_TARGET=linux node .electron-build/build.js",
+    "build:mas": "cross-env BUILD_TARGET=mas node .electron-build/build.js",
+    "prebuild": "cd client && npm run build && cd .. && cp -a ./client/dist ./view",
+    "postbuild": "rm -rf ./view"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@gitlab.alibaba-inc.com:music/x-xiami-desktop.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "asar": "^0.13.0",
+    "cross-env": "^5.0.5",
+    "electron": "^1.7.6",
+    "electron-packager": "^9.0.1"
+  },
+  "dependencies": {
+    "anyproxy": "^4.0.0-beta17",
+    "express": "^4.15.4",
+    "sudo-prompt": "^7.1.1"
+  }
+}
