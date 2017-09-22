@@ -22,7 +22,6 @@ export default {
     },
     data() {
         return {
-            isMaxed: false,
         }
     },
     computed: {
@@ -33,8 +32,7 @@ export default {
     methods: {
         ondblclick() {
             const browserWindow = this.$.remote.getCurrentWindow()
-            this.isMaxed = !this.isMaxed;
-            this.isMaxed ? browserWindow.maximize() : browserWindow.unmaximize();
+            browserWindow.isMaximized() ? browserWindow.unmaximize() : browserWindow.maximize();
         },
         onStart() {
             this.$store.start();
