@@ -12,13 +12,13 @@ const store = new Vuex.Store({
         rules: [],
         activeRule: null,
         setting: {
-            port: 8081,
+            port: 8089,
             recordlist: false,
             global: false,
             forceProxyHttps: false,
             silent: false,
             webInterface: {
-                enable: true,
+                enable: false,
                 webPort: 8002,
                 wsPort: 8003,
             },
@@ -68,7 +68,7 @@ const methods = {
         this.state.isrunning = false;
     },
     setRecords(newrecorders) {
-        this.state.records = newrecorders;
+        this.state.records = newrecorders.reverse();
     },
     isrunning(status) {
         this.state.isrunning = status;

@@ -1,6 +1,8 @@
 const { app, BrowserWindow, ipcMain, shell } = require('electron');
 const fs = require('fs');
 const path = require('path');
+const exec = require('child_process').exec;
+
 // const server = require('./server')
 const AnyProxy = require('anyproxy');
 
@@ -29,9 +31,9 @@ function sudoExec(cb) {
 var rules = {
     *beforeSendRequest(requestDetail) {
         const newRequestOptions = Object.assign({}, requestDetail.requestOptions);
-        //   newRequestOptions.headers.Host = "www.baidu.com";
-        //newRequestOptions.hostname = "www.baidu.com"
-        newRequestOptions.port = 8080;
+        newRequestOptions.headers.Host = "www.baidu.com";
+        newRequestOptions.hostname = "www.baidu.com"
+        //newRequestOptions.port = 8080;
         // if (newRequestOptions.path == '/pc.html') {
         //     newRequestOptions.path = "/"
         // }
@@ -71,8 +73,14 @@ function getRuleModule(id) {
 module.exports = {
     needUpdate: false,
     server: null,
+    host() {
+        return app.$.server.URL;
+    },
     start(options, ruleId, cb) {
         options.rule = getRuleModule(ruleId) || rules;
+        if (options.dangerouslyIgnoreUnauthorized == undefined) {
+            options.dangerouslyIgnoreUnauthorized = true;
+        }
         this.server = new AnyProxy.ProxyServer(options);
         if (this.server && cb) {
             if (cb) {
@@ -220,5 +228,8 @@ module.exports = {
                 if (err) throw err;
             });
         }
+    },
+    installCA(url) {
+        shell.openExternal(url);
     }
 }

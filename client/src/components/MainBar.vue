@@ -7,7 +7,12 @@
             <el-button type="text" icon="document" @click="onLogger">日志</el-button>
         </div>
         <div class='right'>
-            <el-button type="text" icon="information" @click="onCA">证书</el-button>
+            <el-popover ref="popover" placement="top-start" width="200" trigger="hover" content="afdjalkfjlk">
+                <div @click="onCA">
+                    <qriously :value="rqurl" :size="180" />
+                </div>
+            </el-popover>
+            <el-button v-popover:popover type="text" icon="information">证书</el-button>
         </div>
         <Setting ref="setting" />
     </div>
@@ -27,6 +32,9 @@ export default {
     computed: {
         isRunning() {
             return this.$store.state.isrunning;
+        },
+        rqurl() {
+            return this.$.api.host() + '/fetchCA';
         }
     },
     methods: {
@@ -54,7 +62,7 @@ export default {
 
         },
         onCA() {
-
+            this.$.api.installCA(this.rqurl);
         }
     }
 }
@@ -108,6 +116,11 @@ export default {
     color: rgb(127, 127, 127);
     font-size: 24px;
 }
+
+
+
+
+
 
 
 

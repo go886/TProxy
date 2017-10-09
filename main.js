@@ -6,7 +6,7 @@ const {server} = require('./server/server')
 
 app.$ = {
   api,
-  // server
+  server
 }
 
 server.start(8123);
@@ -18,7 +18,7 @@ server.start(8123);
 let win;
 function createWindow() {
   const menu = require('./menu')  
-  // menu.createAppMenu();
+  menu.createAppMenu();
   // 创建一个新的浏览器窗口
   var electronScreen = electron.screen
   var size = electronScreen.getPrimaryDisplay().workAreaSize
@@ -43,7 +43,7 @@ function createWindow() {
   // win.loadURL('http://localhost:8080/')
 
   //webpack url
-  var url  = (process.env.NODE_ENV === 'development') ? 'http://localhost:8080/' : server.URL
+  var url  = (process.env.NODE_ENV === '1development') ? 'http://localhost:8080/' : server.URL
   win.loadURL(url)
   win.focus();
 

@@ -10,7 +10,7 @@
                 <el-input v-model="currentRule.name"></el-input>
             </el-form-item>
             <el-form-item label="规则代码">
-                <codemirror v-model="currentRuleValue" :options="editorOption"></codemirror>
+                <codemirror class="test" v-model="currentRuleValue" :options="editorOption"></codemirror>
             </el-form-item>
 
             <el-form-item>
@@ -56,7 +56,7 @@ export default {
             }, {
                 name: '修改返回数据',
                 id: 'sample_modify_response_header',
-                system:true,
+                system: true,
             }],
             formData: {},
             ruleName: null,
@@ -132,5 +132,13 @@ export default {
 
 .abc {
     width: 100%;
+}
+
+.el-form-item__content {
+    line-height: 20px;
+}
+
+.test {
+    line-height: 20px;
 }
 </style>

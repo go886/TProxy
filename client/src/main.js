@@ -6,11 +6,11 @@ import App from './App'
 import router from './router'
 import store from './store'
 
-// import VueQriously from 'vue-qriously'
+import VueQriously from 'vue-qriously'
 import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-default/index.css'
 
-// Vue.use(VueQriously);
+Vue.use(VueQriously);
 Vue.use(ElementUI);
 Vue.use({
   install(Vue, options) {

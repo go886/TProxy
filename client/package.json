@@ -11,9 +11,11 @@
   },
   "dependencies": {
     "element-ui": "^1.4.4",
+    "highlight.js": "^9.12.0",
     "moment": "^2.18.1",
     "vue": "^2.4.2",
     "vue-codemirror": "^3.1.4",
+    "vue-qriously": "^1.1.1",
     "vue-router": "^2.7.0",
     "vuex": "^2.4.0"
   },
