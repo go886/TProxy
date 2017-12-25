@@ -1,60 +1,56 @@
-const { app, BrowserWindow, ipcMain, shell } = require('electron');
+const { app, BrowserWindow, ipcMain, shell, dialog} = require('electron');
 const fs = require('fs');
 const path = require('path');
-const exec = require('child_process').exec;
-
-// const server = require('./server')
 const AnyProxy = require('anyproxy');
+const sudo = require('sudo-prompt');
+const pkg = require('../package');
 
 
 function sudoExec(cb) {
-    const process = require('child_process');   // The power of Node.JS
-    var ls = process.spawn('./test.sh');
-    app.quit();
-    return;
+    const ENV_NAME = `${pkg.name}_env`;
+    if (process.env[ENV_NAME] != 'root') {
+        let options = {
+            name: pkg.name,
+            icns: path.resolve(__dirname, '../icon.png')
+        };
 
-    // shell.openExternal('bash sudo /Users/go886/Desktop/proxy/build/proxy-mas-x64/proxy.app/Contents/MacOS/prox')
-    var sudo = require('sudo-prompt');
-    var options = {
-        name: 'Electron',
-        // icns: '/Applications/Electron.app/Contents/Resources/Electron.icns', // (optional)
-    };
-    sudo.exec('/Users/go886/Desktop/proxy/build/proxy-mas-x64/proxy.app/Contents/MacOS/prox', options,
-        function (error, stdout, stderr) {
-            if (cb) {
-                console.log('abc')
-            }
-        }
-    );
+        app.hide();
+        sudo.exec(`${ENV_NAME}=root ${process.execPath}`, options, (error, stdout, stderr) => {
+            // if (error){
+            //     dialog.showMessageBox(null, {
+            //         type: 'error',
+            //         buttons: ['关闭'],
+            //         message: 'Error',
+            //         detail: JSON.stringify(error)
+            //     });                
+            // };
+            
+            app.quit();            
+        });
+    } else {
+        if (cb) cb();
+    }
 }
 
 var rules = {
     *beforeSendRequest(requestDetail) {
         const newRequestOptions = Object.assign({}, requestDetail.requestOptions);
-        newRequestOptions.headers.Host = "www.baidu.com";
-        newRequestOptions.hostname = "www.baidu.com"
-        //newRequestOptions.port = 8080;
+        // newRequestOptions.headers.Host = "www.baidu.com";
+        // newRequestOptions.hostname = "www.baidu.com"
+        newRequestOptions.port = 8080;
         // if (newRequestOptions.path == '/pc.html') {
         //     newRequestOptions.path = "/"
         // }
         return {
             requestOptions: newRequestOptions
         };
-        if (requestDetail.url.indexOf('http://httpbin.org') === 0) {
-            const newRequestOptions = requestDetail.requestOptions;
-            newRequestOptions.path = '/user-agent';
-            newRequestOptions.method = 'GET';
-            return {
-                requestOptions: newRequestOptions
-            };
-        }
     },
 };
 
 //获取rule文件
 function getRuleModule(id) {
-    if (!id) return null;
-    const filepath = path.resolve(__dirname, 'rule_custom/' + id + '.js')
+    if (!id) return null;    
+    const filepath =  path.join(app.getPath('userData'), 'rule_custom/' + id + '.js')
     if (fs.existsSync(filepath)) {
         var code = fs.readFileSync(filepath, 'utf8');
         code = "return (function(module, exports, require){" + code + "})";
@@ -112,7 +108,7 @@ module.exports = {
     getLastRecorders() {
         return new Promise((resolve, reject) => {
             if (this.server.recorder) {
-                this.server.recorder.getRecords(null, 10000, (err, docs) => {
+                this.server.recorder.getRecords(null, 1000, (err, docs) => {
                     if (err) {
                         reject(err.toString());
                     } else {
@@ -165,13 +161,13 @@ module.exports = {
         });
     },
     saveRules(rules) {
-        var rulesPath = path.resolve(__dirname, 'rules.json')
+        var rulesPath = path.join(app.getPath('userData'), 'rules.json')
         fs.writeFile(rulesPath, JSON.stringify(rules), 'utf8', (err) => {
             if (err) throw err;
         });
     },
     getRules() {
-        var rulesPath = path.resolve(__dirname, 'rules.json')
+        var rulesPath = path.join(app.getPath('userData'), 'rules.json')
         return new Promise((resolve, reject) => {
             if (fs.existsSync(rulesPath)) {
                 var rules = fs.readFileSync(rulesPath, 'utf8');
@@ -205,7 +201,7 @@ module.exports = {
         });
     },
     getCustomRuleDir() {
-        return __dirname + '/rule_custom';
+        return path.join(app.getPath('userData'), '/rule_custom')        
     },
     getCustomRulePath(id) {
         const filename = id + '.js';
@@ -231,5 +227,23 @@ module.exports = {
     },
     installCA(url) {
         shell.openExternal(url);
+    },
+    saveSetting(setting) {
+        var filename = path.join(app.getPath('userData'), 'setting.json');
+        fs.writeFile(filename, JSON.stringify(setting), 'utf8', (err)=>{
+            if (err) throw err;
+        });
+    },
+    getSetting() {
+        var filename = path.join(app.getPath('userData'), 'setting.json');
+        return new Promise((resolve, reject) => {
+            if (fs.existsSync(filename)) {
+                var setting = fs.readFileSync(filename, 'utf8');
+                setting = JSON.parse(setting);
+                resolve(setting)
+            } else {
+                reject('文件不存在');
+            }
+        });
     }
 }

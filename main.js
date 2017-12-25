@@ -43,7 +43,7 @@ function createWindow() {
   // win.loadURL('http://localhost:8080/')
 
   //webpack url
-  var url  = (process.env.NODE_ENV === '1development') ? 'http://localhost:8080/' : server.URL
+  var url  = (process.env.NODE_ENV === 'development') ? 'http://localhost:8080/' : server.URL
   win.loadURL(url)
   win.focus();
 

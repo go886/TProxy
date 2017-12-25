@@ -64,6 +64,34 @@ export default {
 }
 </script>
 
+<style>
+
+  .el-table .error-row {
+    color: #FF4949;
+  }
+
+
+  .el-table .gray-row {
+    color: #999;
+  }
+
+  /* .el-table tr.current-row>td {
+  background-color: #58B7FF;
+} */
+
+  .el-table .success-row td:nth-child(3) {
+    color: #13CE66;
+  }
+
+  .el-table .error-row {
+    color: #FF4949;
+  }
+
+  .el-table .odd-row {
+    background: #FAFAFA;
+  }
+</style>
+
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
 .root {

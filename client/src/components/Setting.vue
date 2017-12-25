@@ -5,7 +5,7 @@
                 <el-input v-model="setting.port"></el-input>
             </el-form-item>
             <el-form-item class="show-record-list" label="抓包列表">
-                <el-switch v-model="recordlist" on-color="#13ce66" on-text="" off-text="">
+                <el-switch v-model="setting.enabledRecord" on-color="#13ce66" on-text="" off-text="">
                 </el-switch>
             </el-form-item>
 
@@ -33,7 +33,6 @@
 export default {
     data() {
         return {
-            recordlist: false,
             settingVisible: false,
         }
     },
@@ -51,6 +50,7 @@ export default {
         onSubmit() {
             this.$refs.form.validate((valid) => {
                 if (valid) {
+                    this.$store.saveSetting();
                     this.settingVisible = false;
                 }
             })

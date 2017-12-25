@@ -13,7 +13,7 @@ function getAnyProxyPath() {
 }
 
 //var httpServer = http.createServer(app).listen(3000);
-var httpsServer; //= https.createServer(ssl.options, app).listen(8080);
+// var httpsServer; //= https.createServer(ssl.options, app).listen(8080);
 
 var server = express()
 var dir = '../view';
@@ -101,11 +101,11 @@ function localIp() {
 function run(port) {
   probe(port, function (ret, port) {
     if (ret) {
-      httpsServer = https.createServer(ssl.options, server).listen(port);
-      // server.listen(port, function (r, q) {
-      //   console.log('Example app listening on port' + port);
-      // });
-      server.URL = 'https://' + localIp() + ':' + port;
+      // httpsServer = https.createServer(ssl.options, server).listen(port);
+      server.listen(port, function (r, q) {
+        console.log('Example app listening on port' + port);
+      });
+      server.URL = 'http://' + localIp() + ':' + port;
     } else {
       run(port + 1);
     }

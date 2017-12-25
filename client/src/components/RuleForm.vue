@@ -1,24 +1,28 @@
 <template>
-    <el-dialog custom-class="abc" title="配置规则" size="small" top="10%" :modal="false" :visible.sync="visible" @close="onClose">
-        <el-form ref="form" class="ruleForm" :model="formData" label-width="80px">
-            <el-form-item label="导入样例">
-                <el-select v-model="ruleName" placeholder="" @change="ruleSelectChange">
-                    <el-option v-for="item in ruleOptions" :label="item.name" :value="item.id" />
-                </el-select>
-            </el-form-item>
-            <el-form-item label="名称(自定义)">
-                <el-input v-model="currentRule.name"></el-input>
-            </el-form-item>
-            <el-form-item label="规则代码">
-                <codemirror class="test" v-model="currentRuleValue" :options="editorOption"></codemirror>
-            </el-form-item>
+<div>
+    <transition name="slide-fade" v-if="visible">
+        <div class="root">
+            <el-form ref="form" class="ruleForm" :model="formData" label-width="100px">
+                <el-form-item label="导入样例">
+                    <el-select v-model="ruleName" placeholder="" @change="ruleSelectChange">
+                        <el-option v-for="item in ruleOptions" :label="item.name" :value="item.id" />
+                    </el-select>
+                </el-form-item>
+                <el-form-item label="名称(自定义)">
+                    <el-input v-model="currentRule.name"></el-input>
+                </el-form-item>
+                <el-form-item label="规则代码">
+                    <codemirror class="test" v-model="currentRuleValue" :options="editorOption"></codemirror>
+                </el-form-item>
 
-            <el-form-item>
-                <el-button @click="onSubmit">保存</el-button>
-                <el-button @click="onClose">取消</el-button>
-            </el-form-item>
-        </el-form>
-    </el-dialog>
+                <el-form-item>
+                    <el-button @click="onSubmit">保存</el-button>
+                    <el-button @click="onClose">取消</el-button>
+                </el-form-item>
+            </el-form>
+        </div>
+    </transition>
+</div>
 </template>
 
 <script>
@@ -42,8 +46,8 @@ export default {
                 mode: 'text/javascript',
                 lineNumbers: true,
                 line: true,
-                tabSize: 4,
-                theme: 'monokai',
+                tabSize: 2,
+                theme: 'neo',
             },
             ruleOptions: [{
                 name: '修改请求数据',
@@ -119,15 +123,47 @@ export default {
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped>
-.root {
-    /* background-color: red; */
+<style>
+.CodeMirror {
+    height: 600px;
+    /* height: 100%; */
     width: 100%;
-    height: 100%;
+}
+</style>
+
+<style scoped>
+.slide-fade-enter-active {
+    transition: all .3s ease;
+}
+
+.slide-fade-leave-active {
+    transition: all .3s ease;
+}
+
+.slide-fade-enter,
+.slide-fade-leave-active {
+    transform: translate3d(200px, 0, 0);
+    opacity: 0;
+}
+
+.root {
+    position: absolute;
+    top: 70px;
+    right: 0;
+    /* bottom: 106px; */
+    background-color: #fff;
+    width: 75%;
+    /* height:100% - 36px; */
+    overflow-y: scroll;
+    box-shadow: -3px 2px 9px rgba(0, 0, 0, 0.4);
+    z-index: 999;
+    padding: 10px;
 }
 
 .ruleForm {
     line-height: 1px;
+    height: 100%;
+    /* background-color:red; */
 }
 
 .abc {

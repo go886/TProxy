@@ -13,7 +13,7 @@ const store = new Vuex.Store({
         activeRule: null,
         setting: {
             port: 8089,
-            recordlist: false,
+            enabledRecord: false,
             global: false,
             forceProxyHttps: false,
             silent: false,
@@ -41,6 +41,10 @@ const store = new Vuex.Store({
     }
 })
 
+setTimeout(function() {
+    store.fetchSetting();
+}, 500);
+
 const methods = {
     start() {
         var state = this.state;
@@ -50,11 +54,13 @@ const methods = {
         state.isrunning = true;
         const curlRule = state.activeRule||{}
         this.$.api.start(state.setting, curlRule.id, (res) => {
-            this.$.api.getLastRecorders().then(res => {
-                this.setRecords(res)
-            }).catch(err => {
-                alert(err);
-            });
+            if (state.setting.enabledRecord) {
+                this.$.api.getLastRecorders().then(res => {
+                    this.setRecords(res)
+                }).catch(err => {
+                    alert(err);
+                });
+            }
         });
     },
     restart() {
@@ -111,6 +117,16 @@ const methods = {
         if (curRule && curRule.id == ruleId) {
             this.restart();
         }
+    },
+    saveSetting() {
+        this.$.api.saveSetting(this.state.setting);
+    },
+    fetchSetting() {
+        this.$.api.getSetting().then((res)=>{
+            this.state.setting = res;
+        }).catch((err)=>{
+
+        });
     }
 }
 
